@@ -1,8 +1,8 @@
 terraform {
 	required_providers {
-		aws = {
-			source = "hashicorp/aws"
-			version "~> 6.0"
+		aws       = {
+			source  = "hashicorp/aws"
+			version = "~> 6.0"
 		}
 	}
 }
@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "auditor_igw" {
 }
 		
 
-resources "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet" {
 	vpc_id            = "aws_vpc.auditor_vpc.id"
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
@@ -53,7 +53,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 
-resources "aws_route_table" "public_rt" {
+resource "aws_route_table" "public_rt" {
   vpc_id            = "aws_vpc.auditor_vpc.id"
 
   route             = {
