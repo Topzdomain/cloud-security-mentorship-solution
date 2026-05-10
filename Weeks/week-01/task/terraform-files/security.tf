@@ -1,7 +1,7 @@
 resource "aws_security_group" "open_ssh_port" {
   name            = "open_ssh_port"
   description     = "Allow traffic to sensitive ports from the internet"
-  vpc_id          = "aws_vpc.auditor_vpc.id"
+  vpc_id          = aws_vpc.auditor_vpc.id
 
 
   ingress {
@@ -53,7 +53,7 @@ resource "aws_security_group" "open_ssh_port" {
 resource "aws_security_group" "open_sensitive_ports" {
   name            = "open_sensitive_ports"
   description     = "allow traffic from internet to sensitive ports"
-  vpc_id          = "aws_vpc.auditor_vpc.id"
+  vpc_id          = aws_vpc.auditor_vpc.id
 
 
   ingress {
