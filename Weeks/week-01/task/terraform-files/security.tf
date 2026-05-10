@@ -44,7 +44,7 @@ resource "aws_security_group" "open_ssh_port" {
     cidr_blocks     = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags              = {
     Name            = "SSH, HTTP, HTTPS, and RDP"
   }
 }
@@ -91,7 +91,7 @@ resource "aws_security_group" "open_sensitive_ports" {
   ingress {
     description     = "allow traffic from internet to port 27017 (MongoDB)"
     from_port       = 27017
-    to-port         = 27017
+    to_port         = 27017
     protocol        = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
@@ -104,7 +104,7 @@ resource "aws_security_group" "open_sensitive_ports" {
     cidr_blocks     = ["0.0.0.0/0"]
   }
 
-  tags  {
+  tags              = {
     Name            = "MySQL, PostgreSQL, Redis, Elasticsearch, and MongoDB"
   }
 }
