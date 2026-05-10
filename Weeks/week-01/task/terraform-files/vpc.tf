@@ -1,8 +1,8 @@
 terraform {
 	required_providers {
-		aws       = {
-			source  = "hashicorp/aws"
-			version = "~> 6.0"
+		aws         = {
+			source    = "hashicorp/aws"
+			version   = "~> 6.0"
 		}
 	}
 }
@@ -73,7 +73,7 @@ resource "aws_route_table_association" "public" {
 }
 
 
-resource "aws-route_table" "private_rt" {
+resource "aws_route_table" "private_rt" {
   vpc_id            = "aws_vpc.auditor_vpc.id"
 
   tags              = {
