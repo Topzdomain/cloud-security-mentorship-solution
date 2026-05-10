@@ -23,10 +23,10 @@ resource "aws_vpc" "auditor_vpc" {
 
 
 resource "aws_internet_gateway" "auditor_igw" {
-	vpc_id = aws_vpc.auditor_vpc.id
+	vpc_id      = aws_vpc.auditor_vpc.id
 
 	tags = {
-		Name = "auditor_igw"
+		Name      = "auditor_igw"
 	}
 }
 		
