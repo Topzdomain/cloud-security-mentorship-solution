@@ -83,10 +83,10 @@ resource "aws_iam_role_policy" "flow_logs_policy" {
       {
         Effect            = "Allow"
         Action            = [
-          "logs:CreateLogGroup"
-          "logs:CreateLogStream"
-          "logs:PutLogEvents"
-          "logs:DescribeLogGroups"
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogGroups",
           "logs:DescribeLogStreams"
         ]
         Resource          = "${aws_cloudwatch_log_group.flow_logs.arn}:*"
@@ -107,7 +107,7 @@ resource "aws_iam_role_policy" "flow_logs_policy" {
 # Sending VPC Flow Logs to Cloudwatch
 
 resource "aws_flow_logs" "cloudwatch" {
-  vpc.id                  = aws_vpc.auditor_vpc.id
+  vpc_id                  = aws_vpc.auditor_vpc.id
   traffic_type            = "ALL"
   iam_role_arn            = aws_iam_role.flow_logs_role.arn
   log_destination         = aws_cloudwatch_log_group.flow_logs.arn
