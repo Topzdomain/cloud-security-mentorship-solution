@@ -125,7 +125,6 @@ resource "aws_flow_log" "cloudwatch" {
 resource "aws_flow_log" "s3" {
   vpc_id                  = aws_vpc.auditor_vpc.id
   traffic_type            = "ALL"
-  iam_role_arn            = aws_iam_role.flow_logs_role.arn
   log_destination         = aws_s3_bucket.flow_logs_bucket.arn
   log_destination_type    = "s3"
 
