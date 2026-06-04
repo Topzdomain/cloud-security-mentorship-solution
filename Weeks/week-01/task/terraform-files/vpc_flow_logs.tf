@@ -65,13 +65,14 @@ resource "aws_iam_role" "flow_logs_role" {
       {
         Effect            = "Allow"
         Principal         = {
-          Service         = "aws-flow-logs.amazonaws.com"
+          Service         = "vpc-flow-logs.amazonaws.com"
         }
         Action            = "sts:AssumeRole"
       }
     ]
   })
 }
+
 
 resource "aws_iam_role_policy" "flow_logs_policy" {
   name                    = "vpc-flow-logs-policy"
