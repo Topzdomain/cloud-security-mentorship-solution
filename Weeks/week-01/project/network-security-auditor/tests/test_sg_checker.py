@@ -1,9 +1,9 @@
 import pytest
-from moto import mock_ec2
+from moto import mock_aws
 import boto3
 from src.sg_checker import check_security_groups
 
-@mock_ec2
+@mock_aws
 def test_detects_open_ssh():
     ec2 = boto3.client('ec2', region_name='us-east-1')
     
@@ -28,7 +28,7 @@ def test_detects_open_ssh():
     ssh_findings = [f for f in findings if f.port == 22 and f.severity == 'CRITICAL']
     assert len(ssh_findings) >= 1
 
-@mock_ec2
+@mock_aws
 def test_no_findings_for_private_cidr():
     ec2 = boto3.client('ec2', region_name='us-east-1')
     vpc = ec2.create_vpc(CidrBlock='10.0.0.0/16')['Vpc']
