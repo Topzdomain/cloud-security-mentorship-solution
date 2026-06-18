@@ -34,8 +34,6 @@ Flow Logs (S3 + CW)                      │
                     audit_report.json            audit_report.html
 ```
 
-*(Replace this with an actual diagram image if you create one — even a simple draw.io export adds a lot of credibility.)*
-
 ---
 
 ## Tech Stack
