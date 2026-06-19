@@ -16,7 +16,7 @@ def generate_report(sg_findings: List[SGFinding], vpc_findings: List[VPCFinding]
         'report_metadata': {
             'timestamp': datetime.utcnow().isoformat(),
             'region': region,
-            'tool': 'Network Security Auditor v1.0',
+            'tool': 'Network Security Auditor v2.0',
         },
         'summary': {
             'total_findings': len(sg_findings) + len(vpc_findings),
