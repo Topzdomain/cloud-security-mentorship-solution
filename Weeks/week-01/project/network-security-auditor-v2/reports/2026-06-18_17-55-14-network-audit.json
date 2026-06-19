@@ -1,0 +1,154 @@
+{
+  "report_metadata": {
+    "timestamp": "2026-06-18T17:55:14.948492",
+    "region": "us-east-1",
+    "tool": "Network Security Auditor v1.0"
+  },
+  "summary": {
+    "total_findings": 13,
+    "critical": 2,
+    "high": 7,
+    "medium": 4
+  },
+  "security_group_findings": [
+    {
+      "sg_id": "sg-0ccbb62b30f9e2e3c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 22,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "SSH",
+      "severity": "CRITICAL",
+      "description": "Port 22 (SSH) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0ccbb62b30f9e2e3c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 3389,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "RDP",
+      "severity": "CRITICAL",
+      "description": "Port 3389 (RDP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-009a63e2bfb50c178",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 5432,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "PostgreSQL",
+      "severity": "HIGH",
+      "description": "Port 5432 (PostgreSQL) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-009a63e2bfb50c178",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 6379,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "Redis",
+      "severity": "HIGH",
+      "description": "Port 6379 (Redis) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-009a63e2bfb50c178",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 27017,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "MongoDB",
+      "severity": "HIGH",
+      "description": "Port 27017 (MongoDB) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-009a63e2bfb50c178",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 3306,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "MySQL",
+      "severity": "HIGH",
+      "description": "Port 3306 (MySQL) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-009a63e2bfb50c178",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 9200,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "Elasticsearch",
+      "severity": "HIGH",
+      "description": "Port 9200 (Elasticsearch) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0216c257fbab74191",
+      "sg_name": "ALB-SG",
+      "vpc_id": "vpc-069964a9014eecc83",
+      "port": 80,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTP",
+      "severity": "MEDIUM",
+      "description": "Port 80 (HTTP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0ccbb62b30f9e2e3c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 80,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTP",
+      "severity": "MEDIUM",
+      "description": "Port 80 (HTTP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0ccbb62b30f9e2e3c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-00d9ad97f5718a93a",
+      "port": 443,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTPS",
+      "severity": "MEDIUM",
+      "description": "Port 443 (HTTPS) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0c9d83fb93da72c2d",
+      "sg_name": "launch-wizard-1",
+      "vpc_id": "vpc-069964a9014eecc83",
+      "port": 80,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTP",
+      "severity": "MEDIUM",
+      "description": "Port 80 (HTTP) open to the internet from 0.0.0.0/0"
+    }
+  ],
+  "vpc_findings": [
+    {
+      "vpc_id": "vpc-046fbbcd2101edfc9",
+      "vpc_name": "Active Directory-vpc",
+      "cidr": "10.0.0.0/16",
+      "severity": "HIGH",
+      "issue": "NO_FLOW_LOGS",
+      "description": "VPC vpc-046fbbcd2101edfc9 has no VPC Flow Logs enabled \u2014 network traffic is unaudited"
+    },
+    {
+      "vpc_id": "vpc-069964a9014eecc83",
+      "vpc_name": "project-vpc",
+      "cidr": "10.0.0.0/16",
+      "severity": "HIGH",
+      "issue": "NO_FLOW_LOGS",
+      "description": "VPC vpc-069964a9014eecc83 has no VPC Flow Logs enabled \u2014 network traffic is unaudited"
+    }
+  ]
+}
