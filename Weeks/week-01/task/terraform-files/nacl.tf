@@ -1,5 +1,5 @@
 resource "aws_default_network_acl" "network_auditor_default_nacl" {
-  default_network_acl_id = aws_vpc.network_auditor_vpc.default_network_acl_id
+  default_network_acl_id = aws_vpc.auditor_vpc.default_network_acl_id
 
 
   # Bad rule — low number, evaluated before everything else
