@@ -11,8 +11,8 @@ DANGEROUS_PORTS = {
     27017: ('MongoDB', 'HIGH'),
     6379: ('Redis', 'HIGH'),
     9200: ('Elasticsearch', 'HIGH'),
-    443: ('HTTPS', 'MEDIUM'),
-    80: ('HTTP', 'MEDIUM'),
+    443: ('HTTPS', 'INFO'),
+    80: ('HTTP', 'LOW'),
 }
 
 @dataclass

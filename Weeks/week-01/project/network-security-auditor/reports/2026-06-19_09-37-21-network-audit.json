@@ -1,0 +1,275 @@
+{
+  "report_metadata": {
+    "timestamp": "2026-06-19T09:37:21.145430",
+    "region": "us-east-1",
+    "tool": "Network Security Auditor v2.0"
+  },
+  "summary": {
+    "total_findings": 22,
+    "critical": 4,
+    "high": 7,
+    "medium": 1,
+    "low": 3,
+    "info": 7
+  },
+  "security_group_findings": [
+    {
+      "sg_id": "sg-0c68fc680672fa39c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 22,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "SSH",
+      "severity": "CRITICAL",
+      "description": "Port 22 (SSH) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0c68fc680672fa39c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 3389,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "RDP",
+      "severity": "CRITICAL",
+      "description": "Port 3389 (RDP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0e18ca4bc94eed75c",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 5432,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "PostgreSQL",
+      "severity": "HIGH",
+      "description": "Port 5432 (PostgreSQL) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0e18ca4bc94eed75c",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 6379,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "Redis",
+      "severity": "HIGH",
+      "description": "Port 6379 (Redis) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0e18ca4bc94eed75c",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 27017,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "MongoDB",
+      "severity": "HIGH",
+      "description": "Port 27017 (MongoDB) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0e18ca4bc94eed75c",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 3306,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "MySQL",
+      "severity": "HIGH",
+      "description": "Port 3306 (MySQL) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0e18ca4bc94eed75c",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 9200,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "Elasticsearch",
+      "severity": "HIGH",
+      "description": "Port 9200 (Elasticsearch) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0216c257fbab74191",
+      "sg_name": "ALB-SG",
+      "vpc_id": "vpc-069964a9014eecc83",
+      "port": 80,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTP",
+      "severity": "LOW",
+      "description": "Port 80 (HTTP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0c9d83fb93da72c2d",
+      "sg_name": "launch-wizard-1",
+      "vpc_id": "vpc-069964a9014eecc83",
+      "port": 80,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTP",
+      "severity": "LOW",
+      "description": "Port 80 (HTTP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0c68fc680672fa39c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 80,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTP",
+      "severity": "LOW",
+      "description": "Port 80 (HTTP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0c68fc680672fa39c",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-01558282053be9210",
+      "port": 443,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "HTTPS",
+      "severity": "INFO",
+      "description": "Port 443 (HTTPS) open to the internet from 0.0.0.0/0"
+    }
+  ],
+  "vpc_findings": [
+    {
+      "vpc_id": "vpc-046fbbcd2101edfc9",
+      "vpc_name": "Active Directory-vpc",
+      "cidr": "10.0.0.0/16",
+      "severity": "HIGH",
+      "issue": "NO_FLOW_LOGS",
+      "description": "VPC vpc-046fbbcd2101edfc9 has no VPC Flow Logs enabled \u2014 network traffic is unaudited"
+    },
+    {
+      "vpc_id": "vpc-069964a9014eecc83",
+      "vpc_name": "project-vpc",
+      "cidr": "10.0.0.0/16",
+      "severity": "HIGH",
+      "issue": "NO_FLOW_LOGS",
+      "description": "VPC vpc-069964a9014eecc83 has no VPC Flow Logs enabled \u2014 network traffic is unaudited"
+    }
+  ],
+  "network_acl_findings": [
+    {
+      "nacl_id": "acl-01857c5315666b98f",
+      "vpc_id": "vpc-01558282053be9210",
+      "is_default": true,
+      "rule_number": 110,
+      "egress": false,
+      "protocol": "TCP",
+      "cidr": "0.0.0.0/0",
+      "port_range": "22-22",
+      "action": "allow",
+      "severity": "CRITICAL",
+      "description": "Rule #110 allows inbound SSH (port 22) from 0.0.0.0/0"
+    },
+    {
+      "nacl_id": "acl-01857c5315666b98f",
+      "vpc_id": "vpc-01558282053be9210",
+      "is_default": true,
+      "rule_number": 120,
+      "egress": false,
+      "protocol": "TCP",
+      "cidr": "0.0.0.0/0",
+      "port_range": "3389-3389",
+      "action": "allow",
+      "severity": "CRITICAL",
+      "description": "Rule #120 allows inbound RDP (port 3389) from 0.0.0.0/0"
+    },
+    {
+      "nacl_id": "acl-01857c5315666b98f",
+      "vpc_id": "vpc-01558282053be9210",
+      "is_default": true,
+      "rule_number": 50,
+      "egress": false,
+      "protocol": "TCP",
+      "cidr": "0.0.0.0/0",
+      "port_range": "23-23",
+      "action": "allow",
+      "severity": "MEDIUM",
+      "description": "Rule #50 uses an unusually low rule number. AWS's own default rules start at 100 \u2014 a number this low suggests it was deliberately placed to be evaluated before other rules, which is worth a deliberate review of evaluation order."
+    },
+    {
+      "nacl_id": "acl-0f5ce422b41940b77",
+      "vpc_id": "vpc-046fbbcd2101edfc9",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": true,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL outbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    },
+    {
+      "nacl_id": "acl-0f5ce422b41940b77",
+      "vpc_id": "vpc-046fbbcd2101edfc9",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": false,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL inbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    },
+    {
+      "nacl_id": "acl-081cf93bf6d5a7900",
+      "vpc_id": "vpc-069964a9014eecc83",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": true,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL outbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    },
+    {
+      "nacl_id": "acl-081cf93bf6d5a7900",
+      "vpc_id": "vpc-069964a9014eecc83",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": false,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL inbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    },
+    {
+      "nacl_id": "acl-01857c5315666b98f",
+      "vpc_id": "vpc-01558282053be9210",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": true,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL outbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    },
+    {
+      "nacl_id": "acl-01857c5315666b98f",
+      "vpc_id": "vpc-01558282053be9210",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": false,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL inbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    }
+  ]
+}
