@@ -10,6 +10,7 @@ from rich import box
 from .sg_checker import check_security_groups
 from .vpc_checker import check_vpcs
 from .nacl_checker import check_network_acls
+from .iam_checker import check_iam_roles
 from .reporter import generate_report
 
 console = Console()
@@ -33,6 +34,9 @@ def main():
     console.print("[*] Scanning Network ACLs...", style="cyan")
     nacl_findings = check_network_acls(args.region)
 
+    console.print("[*] Scanning Network IAM Roles...", style="cyan")
+    iam_findings = check_iam_roles(args.region)
+
     # Print results table
     table = Table(title="Security Findings", box=box.ROUNDED, show_lines=True)
     table.add_column("Severity", style="bold", width=10)
@@ -53,10 +57,14 @@ def main():
         style = severity_styles.get(f.severity, 'white')
         table.add_row(f"[{style}]{f.severity}[/{style}]", f.nacl_id, f.description)
 
+    for f in iam_findings:
+        style = severity_styles.get(f.severity, 'white')
+        table.add_row(f"[{style}]{f.severity}[/{style}]", f.role_name, f.description)    
+
     console.print(table)
 
     # Generate report
-    report = generate_report(sg_findings, vpc_findings, nacl_findings, args.region, args.output)
+    report = generate_report(sg_findings, vpc_findings, nacl_findings, iam_findings, args.region, args.output)
 
     console.print(f"\n[bold green]✅ Scan Complete![/bold green]")
     console.print(f"   Critical: [red]{report['summary']['critical']}[/red]")
