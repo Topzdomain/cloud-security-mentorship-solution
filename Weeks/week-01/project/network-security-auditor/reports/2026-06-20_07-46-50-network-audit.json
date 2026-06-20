@@ -1,0 +1,274 @@
+{
+  "report_metadata": {
+    "timestamp": "2026-06-20T07:46:50.580023",
+    "region": "eu-west-1",
+    "tool": "Network Security Auditor v2.0"
+  },
+  "summary": {
+    "total_findings": 34,
+    "critical": 0,
+    "high": 2,
+    "medium": 30,
+    "low": 0,
+    "info": 2
+  },
+  "security_group_findings": [],
+  "vpc_findings": [
+    {
+      "vpc_id": "vpc-03aa5903ef730af4e",
+      "vpc_name": "Unnamed",
+      "cidr": "172.31.0.0/16",
+      "severity": "HIGH",
+      "issue": "NO_FLOW_LOGS",
+      "description": "VPC vpc-03aa5903ef730af4e has no VPC Flow Logs enabled \u2014 network traffic is unaudited"
+    },
+    {
+      "vpc_id": "vpc-03aa5903ef730af4e",
+      "vpc_name": "DEFAULT",
+      "cidr": "172.31.0.0/16",
+      "severity": "MEDIUM",
+      "issue": "DEFAULT_VPC_IN_USE",
+      "description": "Default VPC detected \u2014 resources should use dedicated VPCs with custom network design"
+    }
+  ],
+  "network_acl_findings": [
+    {
+      "nacl_id": "acl-0a7919fee175123be",
+      "vpc_id": "vpc-03aa5903ef730af4e",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": true,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL outbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    },
+    {
+      "nacl_id": "acl-0a7919fee175123be",
+      "vpc_id": "vpc-03aa5903ef730af4e",
+      "is_default": true,
+      "rule_number": 100,
+      "egress": false,
+      "protocol": "ALL",
+      "cidr": "0.0.0.0/0",
+      "port_range": "ALL",
+      "action": "allow",
+      "severity": "INFO",
+      "description": "Rule #100 allows ALL inbound traffic from 0.0.0.0/0 \u2014 no network-layer restriction in place. This is AWS's unmodified default rule \u2014 normal in most environments that rely on Security Groups as the primary access control."
+    }
+  ],
+  "iam_findings": [
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "HIGH",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants iam:passrole \u2014 known privilege-escalation primitive(s). A principal with this permission can potentially grant itself broader access later."
+    },
+    {
+      "role_name": "aisec-readonly-role",
+      "policy_name": "AssumeRolePolicyDocument",
+      "policy_type": "trust",
+      "severity": "MEDIUM",
+      "description": "Role 'aisec-readonly-role' allows cross-account assumption from arn:aws:iam::315527911599:root without an sts:ExternalId condition \u2014 vulnerable to confused-deputy risk if that account ID leaks."
+    },
+    {
+      "role_name": "aisec-readonly-role",
+      "policy_name": "AmazonGuardDutyReadOnlyAccess",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AmazonGuardDutyReadOnlyAccess' grants guardduty:Describe*, guardduty:Get*, guardduty:List* on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aisec-readonly-role",
+      "policy_name": "AmazonGuardDutyReadOnlyAccess",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AmazonGuardDutyReadOnlyAccess' grants organizations:ListDelegatedAdministrators, organizations:ListAWSServiceAccessForOrganization, organizations:DescribeOrganizationalUnit... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aisec-readonly-role",
+      "policy_name": "ViewOnlyAccess",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'ViewOnlyAccess' grants acm:ListCertificates, aiops:GetInvestigation, aiops:GetInvestigationGroup... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aisec-readonly-role",
+      "policy_name": "SecurityAudit",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'SecurityAudit' grants a4b:ListSkills, access-analyzer:GetAnalyzedResource, access-analyzer:GetAnalyzer... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aisec-readonly-role",
+      "policy_name": "AWSCloudTrail_ReadOnlyAccess",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSCloudTrail_ReadOnlyAccess' grants cloudtrail:Get*, cloudtrail:Describe*, cloudtrail:List*... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkMulticontainerDocker",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkMulticontainerDocker' grants ecs:Poll, ecs:StartTask, ecs:StopTask... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkMulticontainerDocker",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkMulticontainerDocker' grants ecs:TagResource on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkMulticontainerDocker",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkMulticontainerDocker' grants bedrock:ListFoundationModels, elasticbeanstalk:DescribeEvents, elasticbeanstalk:DescribeEnvironmentHealth on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkMulticontainerDocker",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkMulticontainerDocker' grants aws-marketplace:Subscribe, aws-marketplace:ViewSubscriptions, aws-marketplace:Unsubscribe on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWebTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWebTier' grants xray:PutTraceSegments, xray:PutTelemetryRecords, xray:GetSamplingRules... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWebTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWebTier' grants bedrock:ListFoundationModels, elasticbeanstalk:DescribeEvents, elasticbeanstalk:DescribeEnvironmentHealth on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWebTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWebTier' grants aws-marketplace:Subscribe, aws-marketplace:ViewSubscriptions, aws-marketplace:Unsubscribe on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWorkerTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWorkerTier' grants cloudwatch:PutMetricData on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWorkerTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWorkerTier' grants xray:PutTraceSegments, xray:PutTelemetryRecords, xray:GetSamplingRules... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWorkerTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWorkerTier' grants sqs:ChangeMessageVisibility, sqs:DeleteMessage, sqs:ReceiveMessage... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWorkerTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWorkerTier' grants bedrock:ListFoundationModels, elasticbeanstalk:DescribeEvents, elasticbeanstalk:DescribeEnvironmentHealth on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-ec2-instance-role",
+      "policy_name": "AWSElasticBeanstalkWorkerTier",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkWorkerTier' grants aws-marketplace:Subscribe, aws-marketplace:ViewSubscriptions, aws-marketplace:Unsubscribe on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkEnhancedHealth",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkEnhancedHealth' grants elasticloadbalancing:DescribeInstanceHealth, elasticloadbalancing:DescribeLoadBalancers, elasticloadbalancing:DescribeTargetHealth... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants elasticbeanstalk:* on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants autoscaling:DescribeAccountLimits, autoscaling:DescribeAutoScalingGroups, autoscaling:DescribeAutoScalingInstances... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants ec2:AllocateAddress, ec2:AssociateAddress, ec2:AuthorizeSecurityGroupEgress... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants ec2:RunInstances on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants ecs:CreateCluster, ecs:DescribeClusters, ecs:RegisterTaskDefinition on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants ecs:TagResource on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "aws-elasticbeanstalk-service-role",
+      "policy_name": "AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy' grants ec2:createTags on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "SSM-EC2-ROLE",
+      "policy_name": "AmazonSSMManagedInstanceCore",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AmazonSSMManagedInstanceCore' grants ssm:DescribeAssociation, ssm:GetDeployablePatchSnapshotForInstance, ssm:GetDocument... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "SSM-EC2-ROLE",
+      "policy_name": "AmazonSSMManagedInstanceCore",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AmazonSSMManagedInstanceCore' grants ssmmessages:CreateControlChannel, ssmmessages:CreateDataChannel, ssmmessages:OpenControlChannel... on Resource: '*' \u2014 access is not scoped to specific resources."
+    },
+    {
+      "role_name": "SSM-EC2-ROLE",
+      "policy_name": "AmazonSSMManagedInstanceCore",
+      "policy_type": "managed",
+      "severity": "MEDIUM",
+      "description": "Policy 'AmazonSSMManagedInstanceCore' grants ec2messages:AcknowledgeMessage, ec2messages:DeleteMessage, ec2messages:FailMessage... on Resource: '*' \u2014 access is not scoped to specific resources."
+    }
+  ]
+}
