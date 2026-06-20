@@ -21,7 +21,7 @@ def main():
     parser.add_argument('--output', default='reports', help='Output directory for reports')
     args = parser.parse_args()
 
-    console.print(f"\n[bold blue]🔍 AWS Network Security Auditor[/bold blue]")
+    console.print(f"\n[bold blue]🔍 AWS Network Security Auditor V2[/bold blue]")
     console.print(f"Region: [yellow]{args.region}[/yellow]\n")
 
     # Run checks
@@ -41,7 +41,7 @@ def main():
     table = Table(title="Security Findings", box=box.ROUNDED, show_lines=True)
     table.add_column("Severity", style="bold", width=10)
     table.add_column("Resource", width=25)
-    table.add_column("Issue", width=40)
+    table.add_column("Issue", width=70)
 
     severity_styles = {'CRITICAL': 'red', 'HIGH': 'orange3', 'MEDIUM': 'yellow', 'LOW': 'green', 'INFO': 'blue'}
 
