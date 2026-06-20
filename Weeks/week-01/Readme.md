@@ -114,8 +114,7 @@ Unit tests use `moto` to mock AWS services entirely — no live AWS account or c
 pytest tests/ -v
 ```
 
-![Unit Test Screenshot](/screenshots/mock-aws-test.png)
-*(Insert screenshot of passing tests here)*
+![Unit Test Screenshot](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/mock-aws-test.png)
 
 
 ### Running the auditor
@@ -159,9 +158,8 @@ terraform destroy -auto-approve
 
 This confirmed the auditor correctly flagged: the deliberately misconfigured Security Group (open SSH to `0.0.0.0/0`), the low-numbered permissive NACL rule, and the absence of VPC Flow Logs prior to their creation — validating that detection logic works against real AWS API responses, not just `moto`'s simulated ones.
 
-![Intentionally Misconfigured Network ACLs](/screenshots/intentionally-misconfigured-nacl.png)
-![Result of Scan Flagging NACL Misconfiguration](/screenshots/v2-live-scan-page-3.png)
-*(Insert screenshot of the live AWS Console showing a misconfigured resource, alongside the corresponding finding in the JSON report)*
+![Intentionally Misconfigured Network ACLs](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/intentionally-misconfigured-nacl.png)
+![Result of Scan Flagging NACL Misconfiguration](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/v2-live-scan-page-3.png)
 
 ---
 
