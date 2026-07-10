@@ -158,24 +158,64 @@ terraform destroy -auto-approve
 
 This confirmed the auditor correctly flagged: the deliberately misconfigured Security Group (open SSH to `0.0.0.0/0`), the low-numbered permissive NACL rule, and the absence of VPC Flow Logs prior to their creation — validating that detection logic works against real AWS API responses, not just `moto`'s simulated ones.
 
-![Intentionally Misconfigured Network ACLs](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/intentionally-misconfigured-nacl.png)
-![Result of Scan Flagging NACL Misconfiguration](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/v2-live-scan-page-3.png)
+![Intentionally Misconfigured Network ACLs](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/intentionally-misconfigured-nacl.png?token=GHSAT0AAAAAAECLGCXMSYMDRHSJEBGK4QGO2SRK4VQ)
+![Result of Scan Flagging NACL Misconfiguration](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/v2-live-scan-page-3.png?token=GHSAT0AAAAAAECLGCXMBNQSOIAEJ34POTSE2SRK56A)
 
 ---
 
-## Sample Findings
+## JSON Findings EXCERPT
 
-| Severity | Example Finding |
-|---|---|
-| CRITICAL | Security Group allows inbound traffic on port 22 (SSH) from `0.0.0.0/0` |
-| CRITICAL | IAM role grants `Action: "*"` on `Resource: "*"` — equivalent to full admin |
-| HIGH | NACL rule allows a wide inbound port range from `0.0.0.0/0` |
-| MEDIUM | NACL rule uses an unusually low rule number, evaluated ahead of intended rules |
-| MEDIUM | VPC Flow Logs are disabled on `vpc-xxxxxxxx` |
-| LOW | VPC uses an overly broad `/16` CIDR block |
-| INFO | Default NACL allow-all rule present — expected when Security Groups are the primary access control |
-
-*(Insert JSON report excerpt or a generated table view here)*
+{
+  "report_metadata": {
+    "timestamp": "2026-06-19T09:37:21.145430",
+    "region": "us-east-1",
+    "tool": "Network Security Auditor v2.0"
+  },
+  "summary": {
+    "total_findings": 22,
+    "critical": 4,
+    "high": 7,
+    "medium": 1,
+    "low": 3,
+    "info": 7
+  },
+  "security_group_findings": [
+    {
+      "sg_id": "sg-0c68fc****",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-01558****",
+      "port": 22,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "SSH",
+      "severity": "CRITICAL",
+      "description": "Port 22 (SSH) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0c68fc****",
+      "sg_name": "open_ssh_port",
+      "vpc_id": "vpc-01558****",
+      "port": 3389,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "RDP",
+      "severity": "CRITICAL",
+      "description": "Port 3389 (RDP) open to the internet from 0.0.0.0/0"
+    },
+    {
+      "sg_id": "sg-0e18ca****",
+      "sg_name": "open_sensitive_ports",
+      "vpc_id": "vpc-01558****",
+      "port": 5432,
+      "protocol": "tcp",
+      "cidr": "0.0.0.0/0",
+      "service": "PostgreSQL",
+      "severity": "HIGH",
+      "description": "Port 5432 (PostgreSQL) open to the internet from 0.0.0.0/0"
+    }
+  ],
+  "...": "22 total findings across Security Groups, VPCs, Network ACLs, and IAM roles"
+}
 
 ---
 
