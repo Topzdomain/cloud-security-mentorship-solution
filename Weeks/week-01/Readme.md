@@ -114,7 +114,7 @@ Unit tests use `moto` to mock AWS services entirely — no live AWS account or c
 pytest tests/ -v
 ```
 
-![Unit Test Screenshot](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/mock-aws-test.png?token=GHSAT0AAAAAAECLGCXMVBNEEPCSTVXPWC4S2SRKYEQ)
+![Unit Test Screenshot](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/mock-aws-test.png)
 
 
 ### Running the auditor
@@ -158,12 +158,14 @@ terraform destroy -auto-approve
 
 This confirmed the auditor correctly flagged: the deliberately misconfigured Security Group (open SSH to `0.0.0.0/0`), the low-numbered permissive NACL rule, and the absence of VPC Flow Logs prior to their creation — validating that detection logic works against real AWS API responses, not just `moto`'s simulated ones.
 
-![Intentionally Misconfigured Network ACLs](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/intentionally-misconfigured-nacl.png?token=GHSAT0AAAAAAECLGCXMSYMDRHSJEBGK4QGO2SRK4VQ)
+![Intentionally Misconfigured Network ACLs](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/intentionally-misconfigured-nacl.png)
+![Result of Scan Flagging NACL Misconfiguration](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/v2-live-scan-page-3.png)
 
 ---
 
 ## JSON Findings EXCERPT
 
+```bash
 {
   "report_metadata": {
     "timestamp": "2026-06-19T09:37:21.145430",
@@ -215,7 +217,7 @@ This confirmed the auditor correctly flagged: the deliberately misconfigured Sec
   ],
   "...": "22 total findings across Security Groups, VPCs, Network ACLs, and IAM roles"
 }
-
+```
 ---
 
 ## Lessons Learned
