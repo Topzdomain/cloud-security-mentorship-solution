@@ -160,8 +160,6 @@ This confirmed the auditor correctly flagged: the deliberately misconfigured Sec
 
 ![Intentionally Misconfigured Network ACLs](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/intentionally-misconfigured-nacl.png?token=GHSAT0AAAAAAECLGCXMSYMDRHSJEBGK4QGO2SRK4VQ)
 
-![Result of Scan Flagging NACL Misconfiguration](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/v2-live-scan-page-3.png?token=GHSAT0AAAAAAECLGCXMBNQSOIAEJ34POTSE2SRK56A)
-
 ---
 
 ## JSON Findings EXCERPT
