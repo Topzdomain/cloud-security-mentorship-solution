@@ -114,7 +114,7 @@ Unit tests use `moto` to mock AWS services entirely — no live AWS account or c
 pytest tests/ -v
 ```
 
-![Unit Test Screenshot](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/mock-aws-test.png)
+![Unit Test Screenshot](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/mock-aws-test.png)
 
 
 ### Running the auditor
