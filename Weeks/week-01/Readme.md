@@ -117,6 +117,7 @@ pytest tests/ -v
 ![Unit Test Screenshot](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/refs/heads/auditor-v2/Weeks/week-01/project/network-security-auditor/screenshots/mock-aws-test.png)
 
 
+
 ### Running the auditor
 ```bash
 source venv/Scripts/activate      # Windows Git Bash
