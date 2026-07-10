@@ -72,26 +72,6 @@ network-security-auditor/
 ├── requirements.txt
 └── README.md
 ```
-
----
-
-## Infrastructure (Terraform)
-
-The Terraform configuration provisions a realistic but intentionally imperfect environment, so the auditor can be validated against real findings rather than a theoretical clean environment:
-
-- A custom VPC with public and private subnets
-- Security Groups, including one deliberately misconfigured (e.g. SSH open to `0.0.0.0/0`) to confirm detection works
-- Default Network ACL rules, including an intentionally low-numbered permissive rule (Telnet open on port 23) to test rule-ordering detection
-- VPC Flow Logs delivered to **both** an S3 bucket (cheap, long-term storage) and a CloudWatch Log Group (real-time querying via CloudWatch Insights)
-- IAM role scoped specifically for Flow Log delivery to CloudWatch (S3 delivery uses a bucket policy, not an IAM role — passing `iam_role_arn` to both caused a real `terraform apply` failure during development, see Lessons Learned)
-
-```bash
-cd terraform
-terraform init
-terraform plan
-terraform apply -auto-approve
-```
-
 ---
 
 ## Detection Logic (Python)
