@@ -85,9 +85,8 @@ Macie produced two categories of findings:
 - `SensitiveData:S3Object/Personal` — SSNs, names, and phone numbers detected in uploaded test file
 
 ![Macie Summary Dashboard](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/main/Weeks/week-02/task/screenshots/macie-summary-page.png)
-![Sensitive Data Discovery from Job Scan](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/Weeks/week-02/task/screenshots/macie-job-scan.png)
-*(Insert screenshot of Macie findings dashboard here)*
-*(Insert screenshot of sensitive data discovery job results here)*
+![Sensitive Data Discovery from Job Scan](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/main/Weeks/week-02/task/screenshots/macie-job-scan.png)
+
 
 ---
 
