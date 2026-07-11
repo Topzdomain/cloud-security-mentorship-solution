@@ -22,7 +22,7 @@ This directory documents the Week 2 task, which involved configuring S3 buckets 
 | Bucket Policy | **None** | No policy explicitly granting public access — the bucket is not actually publicly readable despite public access being unblocked |
 | Versioning | **Enabled** | Protects against accidental deletion and ransomware-style overwrites |
 | Encryption | **SSE-KMS** | Server-side encryption using AWS KMS — stronger than SSE-S3 as key access can be independently audited and restricted |
-| Contents | PII test file containing US phone numbers, SSNs, names |
+| Contents | PII test file containing US phone numbers, SSNs, names, Birth dates, Emails, Creditcard numbers |
 
 ### Additional Buckets (Misconfiguration Test Cases)
 
@@ -55,7 +55,6 @@ A test file was uploaded to `encryption-macie-bucket-1` containing synthetic PII
 - Full names (first names and last names)
 - Emails
 - CreditCard Numbers
-- Phone Numbers
 - Date of Birth
 
 This data was used to validate Macie's ability to discover and classify sensitive data at rest — not just flag bucket-level misconfigurations, but actually identify what's inside the buckets and how sensitive it is.
@@ -85,6 +84,8 @@ Macie produced two categories of findings:
 **Sensitive Data Findings** (data classification):
 - `SensitiveData:S3Object/Personal` — SSNs, names, and phone numbers detected in uploaded test file
 
+![Macie Summary Dashboard](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/main/Weeks/week-02/task/screenshots/macie-summary-page.png)
+![Sensitive Data Discovery from Job Scan](https://raw.githubusercontent.com/Topzdomain/cloud-security-mentorship-solution/Weeks/week-02/task/screenshots/macie-job-scan.png)
 *(Insert screenshot of Macie findings dashboard here)*
 *(Insert screenshot of sensitive data discovery job results here)*
 
