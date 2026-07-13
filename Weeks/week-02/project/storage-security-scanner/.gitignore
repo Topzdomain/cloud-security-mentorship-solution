@@ -12,3 +12,7 @@ venv/
 
 # IDE
 .vscode/
+
+# reports
+
+reports/
