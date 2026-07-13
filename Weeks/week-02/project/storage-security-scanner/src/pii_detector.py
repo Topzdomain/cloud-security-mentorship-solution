@@ -65,14 +65,14 @@ def _deduplicate(raw_findings: List[Dict]) -> List[Dict]:
         key = (f['bucket'], f['object_key'], f['pii_type'])
         g = grouped[key]
         g['match_count'] += f['match_count']
-        if f.get('location') and f['location'] not in g['locations']:
-            g['locations'].append(f['location'])
+        # Only capture the first location — where the sample was found
         if g['sample'] is None:
             g['sample']     = f['sample']
             g['severity']   = f['severity']
             g['bucket']     = f['bucket']
             g['object_key'] = f['object_key']
             g['pii_type']   = f['pii_type']
+            g['location']   = f.get('location', 'N/A')
 
     results = []
     for g in grouped.values():
@@ -82,7 +82,7 @@ def _deduplicate(raw_findings: List[Dict]) -> List[Dict]:
             'pii_type':    g['pii_type'],
             'severity':    g['severity'],
             'match_count': g['match_count'],
-            'location':    ', '.join(g['locations']) if g['locations'] else 'N/A',
+            'location':    g.get('location', 'N/A'),
             'sample':      g['sample'],
         })
 

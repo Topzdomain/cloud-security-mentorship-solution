@@ -116,6 +116,72 @@
     <h2 class="section-title">🔍 PII Detection Findings</h2>
 
     {% if pii_findings %}
+    <!-- PII Summary -->
+    <div style="display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap">
+
+        <!-- Severity breakdown cards -->
+        <div style="background:white;border-radius:8px;padding:20px;flex:1;min-width:200px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+            <p style="font-size:0.85rem;color:#6c757d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">
+                PII by Severity
+            </p>
+            {% set pii_critical = pii_findings | selectattr('severity','equalto','CRITICAL') | list | length %}
+            {% set pii_high     = pii_findings | selectattr('severity','equalto','HIGH')     | list | length %}
+            {% set pii_medium   = pii_findings | selectattr('severity','equalto','MEDIUM')   | list | length %}
+            {% set pii_low      = pii_findings | selectattr('severity','equalto','LOW')      | list | length %}
+            {% set pii_total    = pii_findings | length %}
+
+            {% for label, count, color in [
+                ('Critical', pii_critical, '#dc3545'),
+                ('High',     pii_high,     '#fd7e14'),
+                ('Medium',   pii_medium,   '#ffc107'),
+                ('Low',      pii_low,      '#28a745')
+            ] %}
+            {% if count > 0 %}
+            <div style="margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:3px">
+                    <span style="color:{{ color }};font-weight:600">{{ label }}</span>
+                    <span>{{ count }} finding(s)</span>
+                </div>
+                <div style="background:#f0f0f0;border-radius:4px;height:10px;overflow:hidden">
+                    <div style="background:{{ color }};height:100%;width:{{ (count / pii_total * 100) | round | int }}%"></div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- PII type breakdown -->
+        <div style="background:white;border-radius:8px;padding:20px;flex:1;min-width:200px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+            <p style="font-size:0.85rem;color:#6c757d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">
+                PII Types Detected
+            </p>
+            {% set pii_types = pii_findings | map(attribute='pii_type') | list %}
+            {% for pii_type in pii_types | unique | sort %}
+            {% set type_count = pii_findings | selectattr('pii_type','equalto',pii_type) | list | length %}
+            <div style="display:flex;justify-content:space-between;padding:5px 0;
+                        border-bottom:1px solid #f0f0f0;font-size:0.88rem">
+                <span style="color:#495057;font-family:monospace">{{ pii_type }}</span>
+                <span style="background:#e9ecef;padding:1px 8px;border-radius:10px;
+                             font-size:0.8rem;color:#495057">{{ type_count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Total objects affected -->
+        <div style="background:white;border-radius:8px;padding:20px;flex:0 0 160px;
+                    text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+            <p style="font-size:0.85rem;color:#6c757d;text-transform:uppercase;
+                      letter-spacing:.05em;margin-bottom:8px">Total PII Findings</p>
+            <p style="font-size:2.5rem;font-weight:800;color:#1a1a2e">{{ pii_total }}</p>
+            <p style="font-size:0.8rem;color:#6c757d;margin-top:8px">
+                across {{ pii_findings | map(attribute='object_key') | unique | list | length }} object(s)
+            </p>
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if pii_findings %}
     <table>
         <tr>
             <th>Severity</th>
