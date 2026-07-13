@@ -62,7 +62,7 @@ def generate_html_report(results, pii_results: Dict[str, List[Dict]] = None,
     )
 
     path = f"{output_dir}/{timestamp}-s3-security.html"
-    with open(path, 'w') as f:
+    with open(path, 'w', encoding='utf-8') as f:
         f.write(html)
 
     print(f"[+] HTML report saved: {path}")
