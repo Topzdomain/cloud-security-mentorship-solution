@@ -122,6 +122,7 @@
             <th>Bucket</th>
             <th>Object Key</th>
             <th>PII Type</th>
+            <th>Location</th>
             <th>Matches</th>
             <th>Masked Sample</th>
         </tr>
@@ -135,6 +136,7 @@
             <td>{{ f.bucket }}</td>
             <td>{{ f.object_key }}</td>
             <td>{{ f.pii_type }}</td>
+            <td><code>{{ f.location if f.location else 'N/A' }}</code></td>
             <td>{{ f.match_count }}</td>
             <td><code>{{ f.sample }}</code></td>
         </tr>
