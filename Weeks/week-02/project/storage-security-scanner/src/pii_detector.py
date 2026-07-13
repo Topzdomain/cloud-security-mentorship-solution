@@ -7,6 +7,7 @@ import argparse
 from typing import List, Dict
 from datetime import datetime
 from pathlib import Path
+from collections import defaultdict
 from rich.console import Console
 from rich.table import Table
 from rich import box
@@ -42,6 +43,53 @@ SEVERITY_ORDER    = {'CRITICAL': 0, 'HIGH': 1, 'MEDIUM': 2, 'LOW': 3}
 
 
 # ─────────────────────────────────────────
+#  Deduplication Helper
+# ─────────────────────────────────────────
+def _deduplicate(raw_findings: List[Dict]) -> List[Dict]:
+    """
+    Collapse multiple hits of the same PII type in the same file into one row.
+    Aggregates: total match count, all unique locations, one masked sample.
+    Result: one row per (bucket, object_key, pii_type).
+    """
+    grouped = defaultdict(lambda: {
+        'match_count': 0,
+        'locations':   [],
+        'sample':      None,
+        'severity':    None,
+        'bucket':      None,
+        'object_key':  None,
+        'pii_type':    None,
+    })
+
+    for f in raw_findings:
+        key = (f['bucket'], f['object_key'], f['pii_type'])
+        g = grouped[key]
+        g['match_count'] += f['match_count']
+        if f.get('location') and f['location'] not in g['locations']:
+            g['locations'].append(f['location'])
+        if g['sample'] is None:
+            g['sample']     = f['sample']
+            g['severity']   = f['severity']
+            g['bucket']     = f['bucket']
+            g['object_key'] = f['object_key']
+            g['pii_type']   = f['pii_type']
+
+    results = []
+    for g in grouped.values():
+        results.append({
+            'bucket':      g['bucket'],
+            'object_key':  g['object_key'],
+            'pii_type':    g['pii_type'],
+            'severity':    g['severity'],
+            'match_count': g['match_count'],
+            'location':    ', '.join(g['locations']) if g['locations'] else 'N/A',
+            'sample':      g['sample'],
+        })
+
+    return sorted(results, key=lambda x: SEVERITY_ORDER.get(x['severity'], 9))
+
+
+# ─────────────────────────────────────────
 #  Location-Aware PII Scanners (per file type)
 # ─────────────────────────────────────────
 def _scan_text(content: str) -> List[Dict]:
@@ -66,22 +114,21 @@ def _scan_csv(content: str) -> List[Dict]:
     findings = []
     try:
         reader = csv.DictReader(io.StringIO(content))
-        for row_no, row in enumerate(reader, start=2):  # start=2: row 1 is header
+        for row_no, row in enumerate(reader, start=2):
             for col_name, cell_value in row.items():
                 if not cell_value:
                     continue
                 for pii_type, (pattern, severity) in PII_PATTERNS.items():
-                    matches = pattern.findall(cell_value)
+                    matches = pattern.findall(str(cell_value))
                     if matches:
                         findings.append({
                             'pii_type':    pii_type,
                             'severity':    severity,
                             'match_count': len(matches),
                             'sample':      _mask(str(matches[0])),
-                            'location':    f"Row {row_no}, Column '{col_name}'",
+                            'location':    f"Row {row_no}, Col '{col_name}'",
                         })
     except Exception:
-        # Fallback to plain text scan if CSV parsing fails
         findings = _scan_text(content)
     return findings
 
@@ -98,7 +145,6 @@ def _scan_json(content: str) -> List[Dict]:
 
 
 def _scan_json_node(node, path: str, findings: list):
-    """Recursively walk JSON nodes, building a dot-notation path."""
     if isinstance(node, dict):
         for key, value in node.items():
             _scan_json_node(value, path=f"{path}.{key}" if path else key, findings=findings)
@@ -140,70 +186,105 @@ def _scan_pdf(pdf_bytes: bytes) -> List[Dict]:
     return findings
 
 
+def _scan_excel(excel_bytes: bytes) -> List[Dict]:
+    """Scan Excel file cell by cell — returns Sheet + Cell reference as location."""
+    findings = []
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(io.BytesIO(excel_bytes), read_only=True, data_only=True)
+        for sheet_name in wb.sheetnames:
+            ws = wb[sheet_name]
+            for row in ws.iter_rows():
+                for cell in row:
+                    if cell.value is None:
+                        continue
+                    cell_str = str(cell.value)
+                    for pii_type, (pattern, severity) in PII_PATTERNS.items():
+                        matches = pattern.findall(cell_str)
+                        if matches:
+                            findings.append({
+                                'pii_type':    pii_type,
+                                'severity':    severity,
+                                'match_count': len(matches),
+                                'sample':      _mask(str(matches[0])),
+                                'location':    f"Sheet '{sheet_name}', Cell {cell.coordinate}",
+                            })
+        wb.close()
+    except ImportError:
+        console.print("    [yellow][!] openpyxl not installed — skipping Excel file. Run: pip install openpyxl[/yellow]")
+    except Exception as e:
+        console.print(f"    [yellow][!] Excel scan failed: {e}[/yellow]")
+    return findings
+
+
 # ─────────────────────────────────────────
 #  Core Scanner
 # ─────────────────────────────────────────
-def scan_bucket_for_pii(bucket_name: str, max_objects: int = 10,
-                         max_bytes_per_object: int = 102400) -> List[Dict]:
+def scan_bucket_for_pii(bucket_name: str, max_objects: int = 50,
+                         max_bytes_per_object: int = 512000) -> List[Dict]:
     """Sample objects from a bucket and scan for PII patterns."""
     s3 = boto3.client('s3')
-    findings = []
+    raw_findings = []
 
     try:
-        objects = s3.list_objects_v2(Bucket=bucket_name, MaxKeys=max_objects)
+        paginator = s3.get_paginator('list_objects_v2')
+        pages = paginator.paginate(Bucket=bucket_name, PaginationConfig={'MaxItems': max_objects})
 
-        for obj in objects.get('Contents', []):
-            key      = obj['Key']
-            size_kb  = round(obj.get('Size', 0) / 1024, 1)
-            key_lower = key.lower()
+        for page in pages:
+            for obj in page.get('Contents', []):
+                key       = obj['Key']
+                size_kb   = round(obj.get('Size', 0) / 1024, 1)
+                key_lower = key.lower()
 
-            try:
-                if key_lower.endswith('.pdf'):
-                    console.print(f"    Scanning PDF:    [dim]{key}[/dim] ({size_kb} KB)")
-                    raw      = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
-                    results  = _scan_pdf(raw)
+                try:
+                    if key_lower.endswith('.pdf'):
+                        console.print(f"    Scanning PDF:   [dim]{key}[/dim] ({size_kb} KB)")
+                        raw     = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
+                        results = _scan_pdf(raw)
 
-                elif key_lower.endswith('.csv'):
-                    console.print(f"    Scanning CSV:    [dim]{key}[/dim] ({size_kb} KB)")
-                    raw      = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
-                    content  = raw.decode('utf-8', errors='ignore')
-                    results  = _scan_csv(content)
+                    elif key_lower.endswith('.csv'):
+                        console.print(f"    Scanning CSV:   [dim]{key}[/dim] ({size_kb} KB)")
+                        raw     = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
+                        results = _scan_csv(raw.decode('utf-8', errors='ignore'))
 
-                elif key_lower.endswith('.json'):
-                    console.print(f"    Scanning JSON:   [dim]{key}[/dim] ({size_kb} KB)")
-                    raw      = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
-                    content  = raw.decode('utf-8', errors='ignore')
-                    results  = _scan_json(content)
+                    elif key_lower.endswith('.json'):
+                        console.print(f"    Scanning JSON:  [dim]{key}[/dim] ({size_kb} KB)")
+                        raw     = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
+                        results = _scan_json(raw.decode('utf-8', errors='ignore'))
 
-                elif any(key_lower.endswith(ext) for ext in BINARY_EXTENSIONS):
-                    console.print(f"    [dim]Skipping binary: {key}[/dim]")
+                    elif key_lower.endswith(('.xlsx', '.xls')):
+                        console.print(f"    Scanning Excel: [dim]{key}[/dim] ({size_kb} KB)")
+                        raw     = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
+                        results = _scan_excel(raw)
+
+                    elif any(key_lower.endswith(ext) for ext in BINARY_EXTENSIONS):
+                        console.print(f"    [dim]Skipping binary: {key}[/dim]")
+                        continue
+
+                    else:
+                        console.print(f"    Scanning text:  [dim]{key}[/dim] ({size_kb} KB)")
+                        raw     = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
+                        results = _scan_text(raw.decode('utf-8', errors='ignore'))
+
+                    # Attach bucket + object key then collect
+                    for r in results:
+                        r['bucket']     = bucket_name
+                        r['object_key'] = key
+                    raw_findings.extend(results)
+
+                except Exception as e:
+                    console.print(f"    [yellow][!] Could not read {key}: {e}[/yellow]")
                     continue
-
-                else:
-                    # txt, html, log, xml and anything else readable as plain text
-                    console.print(f"    Scanning text:   [dim]{key}[/dim] ({size_kb} KB)")
-                    raw      = s3.get_object(Bucket=bucket_name, Key=key)['Body'].read(max_bytes_per_object)
-                    content  = raw.decode('utf-8', errors='ignore')
-                    results  = _scan_text(content)
-
-                # Attach bucket + object key to each finding then collect
-                for r in results:
-                    r['bucket']     = bucket_name
-                    r['object_key'] = key
-                findings.extend(results)
-
-            except Exception as e:
-                console.print(f"    [yellow][!] Could not read {key}: {e}[/yellow]")
-                continue
 
     except Exception as e:
         console.print(f"  [red][!] Could not scan {bucket_name}: {e}[/red]")
 
-    return findings
+    # Deduplicate: one row per (bucket, object, pii_type)
+    return _deduplicate(raw_findings)
 
 
-def scan_all_buckets_for_pii(profile: str = None, max_objects: int = 10,
-                               max_bytes: int = 102400) -> Dict[str, List[Dict]]:
+def scan_all_buckets_for_pii(profile: str = None, max_objects: int = 50,
+                               max_bytes: int = 512000) -> Dict[str, List[Dict]]:
     """Scan all accessible S3 buckets for PII."""
     session  = boto3.Session(profile_name=profile) if profile else boto3.Session()
     s3       = session.client('s3')
@@ -222,7 +303,6 @@ def scan_all_buckets_for_pii(profile: str = None, max_objects: int = 10,
 #  Helpers
 # ─────────────────────────────────────────
 def _mask(value: str) -> str:
-    """Mask most characters for safe display in reports."""
     if len(value) <= 4:
         return '****'
     return value[:2] + '*' * (len(value) - 4) + value[-2:]
@@ -243,15 +323,15 @@ def print_findings_table(all_results: Dict[str, List[Dict]]):
     table.add_column("Bucket",    width=25)
     table.add_column("Object",    width=20)
     table.add_column("PII Type",  width=15)
-    table.add_column("Location",  width=25)
-    table.add_column("Matches",   width=8)
+    table.add_column("Locations", width=30)
+    table.add_column("Count",     width=6)
     table.add_column("Sample",    width=18)
 
     severity_styles = {
         'CRITICAL': 'red', 'HIGH': 'orange3', 'MEDIUM': 'yellow', 'LOW': 'green'
     }
 
-    for f in sorted(all_findings, key=lambda x: SEVERITY_ORDER.get(x['severity'], 9)):
+    for f in all_findings:
         style = severity_styles.get(f['severity'], 'white')
         table.add_row(
             f"[{style}]{f['severity']}[/{style}]",
@@ -271,7 +351,7 @@ def print_findings_table(all_results: Dict[str, List[Dict]]):
 # ─────────────────────────────────────────
 def generate_report(all_results: Dict[str, List[Dict]], output_dir: str = 'reports') -> dict:
     Path(output_dir).mkdir(exist_ok=True)
-    timestamp = datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')
+    timestamp    = datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')
     all_findings = [f for findings in all_results.values() for f in findings]
 
     report = {
@@ -289,7 +369,7 @@ def generate_report(all_results: Dict[str, List[Dict]], output_dir: str = 'repor
             'low':            sum(1 for f in all_findings if f['severity'] == 'LOW'),
         },
         'findings_by_bucket': {
-            bucket: sorted(findings, key=lambda x: SEVERITY_ORDER.get(x['severity'], 9))
+            bucket: findings
             for bucket, findings in all_results.items()
             if findings
         }
@@ -308,10 +388,10 @@ def generate_report(all_results: Dict[str, List[Dict]], output_dir: str = 'repor
 # ─────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(description='S3 PII Detector')
-    parser.add_argument('--bucket',      default=None,    help='Scan a specific bucket only')
-    parser.add_argument('--profile',     default=None,    help='AWS profile to use')
-    parser.add_argument('--max-objects', default=10,      type=int, help='Max objects per bucket (default: 10)')
-    parser.add_argument('--max-bytes',   default=102400,  type=int, help='Max bytes per object (default: 100KB)')
+    parser.add_argument('--bucket',      default=None,   help='Scan a specific bucket only')
+    parser.add_argument('--profile',     default=None,   help='AWS profile to use')
+    parser.add_argument('--max-objects', default=50,     type=int, help='Max objects per bucket (default: 50)')
+    parser.add_argument('--max-bytes',   default=512000, type=int, help='Max bytes per object (default: 500KB)')
     parser.add_argument('--output',      default='reports', help='Output directory for reports')
     args = parser.parse_args()
 
