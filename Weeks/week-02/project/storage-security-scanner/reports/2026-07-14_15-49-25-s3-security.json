@@ -1,0 +1,387 @@
+{
+  "report_metadata": {
+    "timestamp": "2026-07-14T15:49:25.810569",
+    "tool": "S3 Security & PII Scanner",
+    "total_buckets_scanned": 4
+  },
+  "summary": {
+    "total_findings": 45,
+    "critical": 8,
+    "high": 8,
+    "medium": 24,
+    "low": 5
+  },
+  "s3_misconfiguration_findings": [
+    {
+      "name": "learn-gitlab-bucket-staging",
+      "region": "us-east-1",
+      "risk_level": "CRITICAL",
+      "risk_score": 85,
+      "findings": [
+        {
+          "severity": "HIGH",
+          "check": "PUBLIC_ACCESS_BLOCK",
+          "detail": "Block Public Access settings not fully enabled: BlockPublicAcls, IgnorePublicAcls, BlockPublicPolicy, RestrictPublicBuckets"
+        },
+        {
+          "severity": "CRITICAL",
+          "check": "PUBLIC_BUCKET_POLICY",
+          "detail": "Bucket policy allows public access: Action=s3:GetObject"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "VERSIONING_DISABLED",
+          "detail": "Object versioning is not enabled \u2014 accidental deletions cannot be recovered"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "NO_ACCESS_LOGGING",
+          "detail": "Server access logging is disabled \u2014 no audit trail for object access"
+        },
+        {
+          "severity": "LOW",
+          "check": "NO_MFA_DELETE",
+          "detail": "MFA Delete not enabled \u2014 objects can be permanently deleted without MFA"
+        }
+      ]
+    },
+    {
+      "name": "web-hosting-bucket-1374",
+      "region": "us-east-1",
+      "risk_level": "CRITICAL",
+      "risk_score": 85,
+      "findings": [
+        {
+          "severity": "HIGH",
+          "check": "PUBLIC_ACCESS_BLOCK",
+          "detail": "Block Public Access settings not fully enabled: BlockPublicAcls, IgnorePublicAcls, BlockPublicPolicy, RestrictPublicBuckets"
+        },
+        {
+          "severity": "CRITICAL",
+          "check": "PUBLIC_BUCKET_POLICY",
+          "detail": "Bucket policy allows public access: Action=s3:GetObject"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "VERSIONING_DISABLED",
+          "detail": "Object versioning is not enabled \u2014 accidental deletions cannot be recovered"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "NO_ACCESS_LOGGING",
+          "detail": "Server access logging is disabled \u2014 no audit trail for object access"
+        },
+        {
+          "severity": "LOW",
+          "check": "NO_MFA_DELETE",
+          "detail": "MFA Delete not enabled \u2014 objects can be permanently deleted without MFA"
+        }
+      ]
+    },
+    {
+      "name": "elasticbeanstalk-us-east-1-127214181374",
+      "region": "us-east-1",
+      "risk_level": "CRITICAL",
+      "risk_score": 45,
+      "findings": [
+        {
+          "severity": "HIGH",
+          "check": "PUBLIC_ACCESS_BLOCK",
+          "detail": "Block Public Access settings not fully enabled: BlockPublicAcls, IgnorePublicAcls, BlockPublicPolicy, RestrictPublicBuckets"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "VERSIONING_DISABLED",
+          "detail": "Object versioning is not enabled \u2014 accidental deletions cannot be recovered"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "NO_ACCESS_LOGGING",
+          "detail": "Server access logging is disabled \u2014 no audit trail for object access"
+        },
+        {
+          "severity": "LOW",
+          "check": "NO_MFA_DELETE",
+          "detail": "MFA Delete not enabled \u2014 objects can be permanently deleted without MFA"
+        }
+      ]
+    },
+    {
+      "name": "encryption-macie-bucket-1",
+      "region": "us-east-1",
+      "risk_level": "HIGH",
+      "risk_score": 35,
+      "findings": [
+        {
+          "severity": "HIGH",
+          "check": "PUBLIC_ACCESS_BLOCK",
+          "detail": "Block Public Access settings not fully enabled: BlockPublicAcls, IgnorePublicAcls, BlockPublicPolicy, RestrictPublicBuckets"
+        },
+        {
+          "severity": "MEDIUM",
+          "check": "NO_ACCESS_LOGGING",
+          "detail": "Server access logging is disabled \u2014 no audit trail for object access"
+        },
+        {
+          "severity": "LOW",
+          "check": "NO_MFA_DELETE",
+          "detail": "MFA Delete not enabled \u2014 objects can be permanently deleted without MFA"
+        }
+      ]
+    }
+  ],
+  "pii_findings": [
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "macie_test_pii_data.xlsx",
+      "pii_type": "US_SSN",
+      "severity": "CRITICAL",
+      "match_count": 101,
+      "location": "Sheet 'PII_Data', Cell C2",
+      "sample": "53*******47"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "macie_test_pii_data.xlsx",
+      "pii_type": "CREDIT_CARD",
+      "severity": "CRITICAL",
+      "match_count": 70,
+      "location": "Sheet 'PII_Data', Cell E2",
+      "sample": "51***************86"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "US_SSN",
+      "severity": "CRITICAL",
+      "match_count": 50,
+      "location": "Page 1",
+      "sample": "95*******94"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "CREDIT_CARD",
+      "severity": "CRITICAL",
+      "match_count": 50,
+      "location": "Page 1",
+      "sample": "47***************32"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "AWS_KEY",
+      "severity": "CRITICAL",
+      "match_count": 50,
+      "location": "Page 1",
+      "sample": "AK****************HX"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "PRIVATE_KEY",
+      "severity": "CRITICAL",
+      "match_count": 50,
+      "location": "Page 1",
+      "sample": "****"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "macie_test_pii_data.xlsx",
+      "pii_type": "EMAIL",
+      "severity": "HIGH",
+      "match_count": 101,
+      "location": "Sheet 'PII_Data', Cell D2",
+      "sample": "us*************om"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "macie_test_pii_data.xlsx",
+      "pii_type": "DATE_OF_BIRTH",
+      "severity": "HIGH",
+      "match_count": 101,
+      "location": "Sheet 'PII_Data', Cell G2",
+      "sample": "19******13"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "EMAIL",
+      "severity": "HIGH",
+      "match_count": 42,
+      "location": "Page 1",
+      "sample": "ja*********************om"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "DATE_OF_BIRTH",
+      "severity": "HIGH",
+      "match_count": 33,
+      "location": "Page 1",
+      "sample": "08******78"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "macie_test_pii_data.xlsx",
+      "pii_type": "PHONE_US",
+      "severity": "MEDIUM",
+      "match_count": 101,
+      "location": "Sheet 'PII_Data', Cell F2",
+      "sample": "****"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "PHONE_US",
+      "severity": "MEDIUM",
+      "match_count": 50,
+      "location": "Page 1",
+      "sample": "****"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 134,
+      "location": "Page 1",
+      "sample": "Ex*******************ta"
+    },
+    {
+      "bucket": "encryption-macie-bucket-1",
+      "object_key": "pii_test_dataset.pdf",
+      "pii_type": "IP_ADDRESS",
+      "severity": "LOW",
+      "match_count": 50,
+      "location": "Page 1",
+      "sample": "10********78"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "index.html",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 1,
+      "location": "Line 1",
+      "sample": "Re*****pp"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "manifest.json",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 2,
+      "location": "Key: short_name",
+      "sample": "Re*****pp"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "static/css/main.bbeec947.css",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 4,
+      "location": "Line 1",
+      "sample": "Fi*****ns"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "static/css/main.bbeec947.css.map",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 4,
+      "location": "Line 1",
+      "sample": "Fi*****ns"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "static/js/main.d5f5d32b.js",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 1,
+      "location": "Line 2",
+      "sample": "Mi**********ct"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "static/js/main.d5f5d32b.js.map",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 2,
+      "location": "Line 1",
+      "sample": "Cu********ld"
+    },
+    {
+      "bucket": "learn-gitlab-bucket-staging",
+      "object_key": "static/media/gitlab.70956053c32221632153e5609e0fe426.svg",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 2,
+      "location": "Line 2",
+      "sample": "Ad*************or"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "index.html",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 1,
+      "location": "Line 1",
+      "sample": "Re*****pp"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "manifest.json",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 2,
+      "location": "Key: short_name",
+      "sample": "Re*****pp"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "static/css/main.bbeec947.css",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 4,
+      "location": "Line 1",
+      "sample": "Fi*****ns"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "static/css/main.bbeec947.css.map",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 4,
+      "location": "Line 1",
+      "sample": "Fi*****ns"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "static/js/main.d5f5d32b.js",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 1,
+      "location": "Line 2",
+      "sample": "Mi**********ct"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "static/js/main.d5f5d32b.js.map",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 2,
+      "location": "Line 1",
+      "sample": "Cu********ld"
+    },
+    {
+      "bucket": "web-hosting-bucket-1374",
+      "object_key": "static/media/gitlab.70956053c32221632153e5609e0fe426.svg",
+      "pii_type": "FULL_NAME",
+      "severity": "MEDIUM",
+      "match_count": 2,
+      "location": "Line 2",
+      "sample": "Ad*************or"
+    }
+  ]
+}
